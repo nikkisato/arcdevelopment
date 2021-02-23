@@ -26,7 +26,7 @@ function App() {
           ></Route>
           <Route
             exact
-            path='/website'
+            path='/websites'
             component={() => <div>website</div>}
           ></Route>
           <Route
