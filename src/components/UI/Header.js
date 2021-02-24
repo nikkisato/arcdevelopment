@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down('md')]: {
       marginBottom: '2em',
     },
-    [theme.breakpoints.down('xd')]: {
+    [theme.breakpoints.down('xs')]: {
       marginBottom: '1.25em',
     },
   },
@@ -71,6 +71,9 @@ const useStyles = makeStyles(theme => ({
     marginRight: '25px',
     height: '45px',
     ...theme.typography.estimate,
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.light,
+    },
   },
   menu: {
     backgroundColor: theme.palette.common.blue,
@@ -113,19 +116,21 @@ export default function Header(props) {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('md'));
+  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [openMenu, setOpenMenu] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
-  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   const handlerChange = (e, newValue) => {
     props.setValue(newValue);
   };
 
-  const handlerClick = e => {
+  const handleClick = e => {
     setAnchorEl(e.currentTarget);
     setOpenMenu(true);
   };
+
   const handleMenuItemClick = (e, i) => {
     setAnchorEl(null);
     setOpenMenu(false);
@@ -134,7 +139,6 @@ export default function Header(props) {
 
   const handleClose = e => {
     setAnchorEl(null);
-
     setOpenMenu(false);
   };
 
@@ -144,9 +148,6 @@ export default function Header(props) {
       link: '/services',
       activeIndex: 1,
       selectedIndex: 0,
-      ariaOwns: anchorEl ? 'simple-menu' : undefined,
-      ariaPopup: anchorEl ? 'true' : undefined,
-      mouseOver: event => handlerClick(event),
     },
     {
       name: 'Custom Software Development',
@@ -155,7 +156,7 @@ export default function Header(props) {
       selectedIndex: 1,
     },
     {
-      name: 'Mobile App Development',
+      name: 'iOS/Android App Development',
       link: '/mobileapps',
       activeIndex: 1,
       selectedIndex: 2,
@@ -170,7 +171,14 @@ export default function Header(props) {
 
   const routes = [
     { name: 'Home', link: '/', activeIndex: 0 },
-    { name: 'Services', link: '/services', activeIndex: 1 },
+    {
+      name: 'Services',
+      link: '/services',
+      activeIndex: 1,
+      ariaOwns: anchorEl ? 'simple-menu' : undefined,
+      ariaPopup: anchorEl ? 'true' : undefined,
+      mouseOver: event => handleClick(event),
+    },
     { name: 'Revolution', link: '/revolution', activeIndex: 2 },
     { name: 'About Us', link: '/about', activeIndex: 3 },
     { name: 'Contact Us', link: '/contact', activeIndex: 4 },
@@ -182,7 +190,6 @@ export default function Header(props) {
         case `${route.link}`:
           if (props.value !== route.activeIndex) {
             props.setValue(route.activeIndex);
-
             if (
               route.selectedIndex &&
               route.selectedIndex !== props.selectedIndex
@@ -191,11 +198,14 @@ export default function Header(props) {
             }
           }
           break;
+        case '/estimate':
+          props.setValue(5);
+          break;
         default:
           break;
       }
     });
-  }, [menuOptions, props.value, props.selectedIndex, routes, props]);
+  }, [props.value, menuOptions, props.selectedIndex, routes, props]);
 
   const tabs = (
     <>
@@ -223,6 +233,8 @@ export default function Header(props) {
         color='secondary'
         className={classes.button}
         to='/estimate'
+        component={Link}
+        onClick={() => props.setValue(5)}
       >
         Free Estimate
       </Button>
@@ -231,11 +243,13 @@ export default function Header(props) {
         anchorEl={anchorEl}
         open={openMenu}
         onClose={handleClose}
-        MenuListProps={{ onMouseLeave: handleClose }}
         classes={{ paper: classes.menu }}
+        MenuListProps={{
+          onMouseLeave: handleClose,
+        }}
         elevation={0}
-        keepMounted
         style={{ zIndex: 1302 }}
+        keepMounted
       >
         {menuOptions.map((option, i) => (
           <MenuItem
@@ -298,7 +312,7 @@ export default function Header(props) {
               props.setValue(5);
             }}
             selected={props.value === 5}
-            className={{
+            classes={{
               root: classes.drawerItemEstimate,
               selected: classes.drawerItemSelected,
             }}
