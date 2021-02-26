@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import Header from '../components/UI/Header';
+import Header from './UI/Header';
 import { ThemeProvider } from '@material-ui/styles';
 import theme from './UI/Theme';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Footer from '../components/UI/Footer';
-import LandingPage from '../components/LandingPage';
-
+import Footer from './UI/Footer';
+import LandingPage from './LandingPage';
+import Services from './Services.js';
+import CustomSoftware from './CustomSoftware.js';
+import MobileApps from './MobileApps';
+import Websites from './Websites';
 function App() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [value, setValue] = useState(0);
@@ -34,22 +37,46 @@ function App() {
           <Route
             exact
             path='/services'
-            component={() => <div>Services</div>}
+            render={props => (
+              <Services
+                {...props}
+                setValue={setValue}
+                setSelectedIndex={setSelectedIndex}
+              />
+            )}
           ></Route>
           <Route
             exact
             path='/customsoftware'
-            component={() => <div>customsoftware</div>}
+            render={props => (
+              <CustomSoftware
+                {...props}
+                setValue={setValue}
+                setSelectedIndex={setSelectedIndex}
+              />
+            )}
           ></Route>
           <Route
             exact
             path='/mobileapps'
-            component={() => <div>mobileapps</div>}
+            render={props => (
+              <MobileApps
+                {...props}
+                setValue={setValue}
+                setSelectedIndex={setSelectedIndex}
+              />
+            )}
           ></Route>
           <Route
             exact
             path='/websites'
-            component={() => <div>website</div>}
+            render={props => (
+              <Websites
+                {...props}
+                setValue={setValue}
+                setSelectedIndex={setSelectedIndex}
+              />
+            )}
           ></Route>
           <Route
             exact
