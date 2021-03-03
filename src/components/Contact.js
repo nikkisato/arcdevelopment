@@ -144,16 +144,18 @@ export default function Contact(props) {
 
   const onConfirm = () => {
     setLoading(true);
-    //input function url from firebase here
     axios
-      .get("firebaseUrlHere", {
-        params: {
-          name: name,
-          email: email,
-          phone: phone,
-          message: message,
-        },
-      })
+      .get(
+        "https://us-central1-material-ui-course-ab7cb.cloudfunctions.net/sendMail",
+        {
+          params: {
+            name: name,
+            email: email,
+            phone: phone,
+            message: message,
+          },
+        }
+      )
       .then(res => {
         setLoading(false);
         setOpen(false);
@@ -260,12 +262,7 @@ export default function Contact(props) {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid
-              item
-              container
-              direction="column"
-              style={{ maxWidth: "20em" }}
-            >
+            <Grid item container direction="column" style={{ width: "20em" }}>
               <Grid item style={{ marginBottom: "0.5em" }}>
                 <TextField
                   label="Name"
@@ -298,7 +295,7 @@ export default function Contact(props) {
                 />
               </Grid>
             </Grid>
-            <Grid item style={{ maxWidth: "20em" }}>
+            <Grid item style={{ width: "20em" }}>
               <TextField
                 value={message}
                 InputProps={{ disableUnderline: true }}
@@ -306,6 +303,7 @@ export default function Contact(props) {
                 id="message"
                 onChange={event => setMessage(event.target.value)}
                 multiline
+                placeholder="Tell us more about your project"
                 fullWidth
                 rows={10}
               />
@@ -331,7 +329,7 @@ export default function Contact(props) {
       <Dialog
         style={{ zIndex: 1302 }}
         open={open}
-        fullScreen={matchesXS}
+        fullScreen={matchesSM}
         onClose={() => setOpen(false)}
         PaperProps={{
           style: {
@@ -342,15 +340,15 @@ export default function Contact(props) {
               : matchesSM
               ? "5em"
               : matchesMD
-              ? "10em"
-              : "20em",
+              ? "15em"
+              : "25em",
             paddingRight: matchesXS
               ? 0
               : matchesSM
               ? "5em"
               : matchesMD
-              ? "10em"
-              : "20em",
+              ? "15em"
+              : "25em",
           },
         }}
       >
@@ -393,7 +391,7 @@ export default function Contact(props) {
               />
             </Grid>
           </Grid>
-          <Grid item style={{ maxWidth: matchesXS ? "100%" : "20em" }}>
+          <Grid item style={{ width: matchesSM ? "100%" : "20em" }}>
             <TextField
               value={message}
               InputProps={{ disableUnderline: true }}
@@ -449,7 +447,7 @@ export default function Contact(props) {
         }}
         onClose={() => setAlert({ ...alert, open: false })}
         autoHideDuration
-      ></Snackbar>
+      />
       <Grid
         item
         container
